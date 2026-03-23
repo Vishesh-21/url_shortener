@@ -10,7 +10,9 @@ const requiredEnv = (key: string, value?: string) => {
   return value;
 };
 
+
 export const ENV = {
   PORT: process.env.PORT || "3000",
   MONGO_URI: requiredEnv("MONGO_URI", process.env.MONGO_URI),
+  APP_URL : requiredEnv("APP_URL", process.env.APP_URL),
 };
