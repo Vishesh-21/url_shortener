@@ -10,7 +10,7 @@ export const Container = ({
   className?: string;
 }) => {
   return (
-    <div className={cn("min-h-screen  p-4 md:p-8 font-sans", className)}>
+    <div className={cn("min-h-screen max-w-2xl  p-4 md:p-8 font-sans mx-auto", className)}>
       <TooltipProvider>{children}</TooltipProvider>
     </div>
   );

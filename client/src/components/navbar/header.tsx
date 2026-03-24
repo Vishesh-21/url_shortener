@@ -13,7 +13,7 @@ interface NavbarProps {
 
 const Navbar = ({ userImage }: NavbarProps) => {
   return (
-    <nav className="flex items-center justify-between py-4 ">
+    <nav className="flex items-center justify-between py-2 ">
       {/* User Profile / Avatar */}
       <div className="relative group cursor-pointer">
         <Avatar className="h-12 w-12 border-2 border-white/20 transition-transform hover:scale-105">

@@ -1,12 +1,15 @@
-
+import { Toaster } from "./components/ui/sonner";
 import { HomePage } from "./pages/home-page";
 
 const App = () => {
   return (
-    <div >
+    <>
       {/* page components  */}
       <HomePage />
-    </div>
+
+      {/* sonner component  */}
+      <Toaster position="top-right"/>
+    </>
   );
 };
 
