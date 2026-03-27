@@ -1,5 +1,3 @@
-import { Copy } from "lucide-react";
-import { Button } from "../ui/button";
 import { CopyButton } from "../common/copy-text";
 
 export const RecentLinks = () => {
