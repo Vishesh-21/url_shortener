@@ -15,4 +15,5 @@ export const ENV = {
   PORT: process.env.PORT || "3000",
   MONGO_URI: requiredEnv("MONGO_URI", process.env.MONGO_URI),
   APP_URL : requiredEnv("APP_URL", process.env.APP_URL),
+  JWT_SECRET : requiredEnv("JWT_SECRET", process.env.JWT_SECRET)
 };

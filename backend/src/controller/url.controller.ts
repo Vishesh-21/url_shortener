@@ -12,7 +12,9 @@ type params = {
 export async function shortURLController(req: Request, res: Response) {
   try {
     const { url } = req.body;
+
     const shortUrl = await createShortUrlWithoutUser(url);
+    
     res.json({ url: `${ENV.APP_URL}${shortUrl}` });
   } catch (error) {
     res.status(500).json({ error });

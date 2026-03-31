@@ -1,22 +1,21 @@
 import express from "express";
 import URLRouter from "./routes/url.routes.js";
 import { globalErrorHandler } from "./middleware/error.middleware.js";
+import authRouter from "./routes/auth.routes.js";
 
 //create express app
 const app = express();
-
 
 /**
  * @swagger
  * definitions: Built in express middleware
  */
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
-
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 //routes
+app.use("/api/auth", authRouter);
 app.use("/api/urls", URLRouter);
-
 
 /**
  * @swagger
@@ -28,8 +27,8 @@ app.use("/api/urls", URLRouter);
  *         description: A successful response
  */
 app.get("/", (req, res) => {
-  res.send("Hello world!")
-})
+  res.send("Hello world!");
+});
 
 // 404 handler
 app.use((req, res) => {
@@ -37,6 +36,6 @@ app.use((req, res) => {
 });
 
 //global error handler
-app.use(globalErrorHandler)
+app.use(globalErrorHandler);
 
-export default app
+export default app;
