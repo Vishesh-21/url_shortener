@@ -6,6 +6,7 @@ import {
 } from "../services/user.services.js";
 import { cookieOptions } from "../utils/helper.js";
 import {
+  logoutAllService,
   logoutService,
 } from "../services/session.services.js";
 
@@ -65,7 +66,6 @@ export async function refreshTokenController(req: Request, res: Response) {
       return res.status(401).json({ error: "Unauthorized!" });
     }
 
-
     const data = await refreshTokenService(refreshToken);
     // Set new refresh token in cookie
     res.cookie("refreshToken", data.refreshToken, cookieOptions);
@@ -102,6 +102,31 @@ export async function logoutController(req: Request, res: Response) {
 
     res.clearCookie("refreshToken", cookieOptions);
     return res.status(200).json({ message: "Logout successful" });
+  } catch (error) {
+    return res.status(500).json({ error });
+  }
+}
+
+//function to logout user from all devices
+export async function logoutAllController(req: Request, res: Response) {
+  try {
+    const refreshToken = req.cookies.refreshToken;
+    if (!refreshToken) {
+      return res.status(400).json({ error: "Refresh token is required" });
+    }
+
+    const data = await logoutAllService(refreshToken);
+
+    if (!data) {
+      return res
+        .status(500)
+        .json({ error: "Error logging out from all devices" });
+    }
+
+    res.clearCookie("refreshToken", cookieOptions);
+    return res
+      .status(200)
+      .json({ message: "Logout from all devices successful" });
   } catch (error) {
     return res.status(500).json({ error });
   }

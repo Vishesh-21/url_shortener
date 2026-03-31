@@ -1,9 +1,11 @@
 import {
   createSession,
   findSessionByRefreshTokenHash,
+  revokedAllRefreshTokens,
 } from "../dao/session.dao.js";
 import { AppError } from "../utils/error.js";
 import { hashRefreshToken } from "../utils/helper.js";
+import { verifyToken } from "../utils/jwt.js";
 
 interface SessionProps {
   userId: string;
@@ -40,7 +42,7 @@ export const createSessionService = async ({
   }
 };
 
-//function to get session by refresh token hash
+//function to logout user by invalidating refresh token
 export const logoutService = async (refreshToken: string) => {
   try {
     if (!refreshToken)
@@ -55,6 +57,25 @@ export const logoutService = async (refreshToken: string) => {
     session.revoked = true;
     await session.save();
     return session;
+  } catch (error) {
+    throw new AppError("Error getting session", 500);
+  }
+};
+
+//function to logout user from all devices by invalidating all refresh tokens
+export const logoutAllService = async (refreshToken: string) => {
+  try {
+    if (!refreshToken)
+      throw new AppError("Refresh token hash is required", 400);
+
+    const decode = verifyToken(refreshToken);
+
+    if (!decode || typeof decode === "string")
+      throw new AppError("Invalid refresh token", 401);
+
+    const revokedAllSessions = await revokedAllRefreshTokens(decode.userId);
+
+    return revokedAllSessions;
   } catch (error) {
     throw new AppError("Error getting session", 500);
   }

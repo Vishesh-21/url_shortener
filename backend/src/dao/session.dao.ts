@@ -44,3 +44,16 @@ export const findSessionByRefreshTokenHash = async (
     throw new AppError("Error finding session", 500);
   }
 };
+
+//function to logout user from all devices by invalidating all refresh tokens
+export const revokedAllRefreshTokens = async (userId: string) => {
+  try {
+    const revokedSessions = await sessionModel.updateMany(
+      { user: userId, revoked: false },
+      { revoked: true },
+    );
+    return revokedSessions.modifiedCount > 0;
+  } catch (error) {
+    throw new AppError("Error getting session", 500);
+  }
+};

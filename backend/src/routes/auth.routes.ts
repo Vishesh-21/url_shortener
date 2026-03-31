@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
   getMeController,
+  logoutAllController,
   logoutController,
   refreshTokenController,
   registerController,
@@ -44,9 +45,18 @@ authRouter.get("/refresh-token", refreshTokenController);
   * Note: Since we are not storing refresh tokens in the database, we cannot invalidate them.
   * In a real application, you would store refresh tokens in the database and mark them as revoked on logout.
   * For this example, we will just clear the refresh token cookie on logout.
-  * In a production application, you should implement a more robust token revocation strategy.
-  * For example, you could store a token version in the database and include it in the JWT payload. On logout, you would increment the token version in the database, which would invalidate all existing tokens for that user.
  */
 authRouter.post("/logout", AuthMiddleware, logoutController);
+
+/**
+ * @route POST /api/auth/logout-all
+ * @desc Logout user from all devices by invalidating all refresh tokens
+ * @access Private
+ * @middleware AuthMiddleware
+ * Note: Since we are not storing refresh tokens in the database, we cannot invalidate them.
+ * In a real application, you would store refresh tokens in the database and mark them as revoked on logout.
+ * For this example, we will just clear the refresh token cookie on logout.
+ */
+authRouter.post("/logout-all", AuthMiddleware, logoutAllController);
 
 export default authRouter;
