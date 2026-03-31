@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
   getMeController,
+  loginController,
   logoutAllController,
   logoutController,
   refreshTokenController,
@@ -15,16 +16,23 @@ const authRouter = Router();
  * @desc Register a new user
  * @access Public
  * @middleware None
- * Note: In a production application, you should implement additional validation and error handling for user registration. For example, you should check if the email is already in use, validate the email format, and enforce password strength requirements.
  */
 authRouter.post("/register", registerController);
+
+/**
+ * @route POST /api/auth/login
+ * @desc Login user and return access token and refresh token
+ * @access Public
+ * @middleware None
+ *
+ */
+authRouter.post("/login", loginController);
 
 /**
  * @route GET /api/auth/get-me
  * @desc Get current user details
  * @access Private
  * @middleware AuthMiddleware
- * Note: In a production application, you should implement additional error handling for this route. For example, you should handle the case where the user ID from the token does not exist in the database, and return an appropriate error message.
  */
 authRouter.get("/get-me", AuthMiddleware, getMeController);
 
@@ -38,13 +46,10 @@ authRouter.get("/get-me", AuthMiddleware, getMeController);
 authRouter.get("/refresh-token", refreshTokenController);
 
 /**
-  * @route POST /api/auth/logout
-  * @desc Logout user by invalidating refresh token
-  * @access Private
-  * @middleware AuthMiddleware
-  * Note: Since we are not storing refresh tokens in the database, we cannot invalidate them.
-  * In a real application, you would store refresh tokens in the database and mark them as revoked on logout.
-  * For this example, we will just clear the refresh token cookie on logout.
+ * @route POST /api/auth/logout
+ * @desc Logout user by invalidating refresh token
+ * @access Private
+ * @middleware AuthMiddleware
  */
 authRouter.post("/logout", AuthMiddleware, logoutController);
 
@@ -53,9 +58,6 @@ authRouter.post("/logout", AuthMiddleware, logoutController);
  * @desc Logout user from all devices by invalidating all refresh tokens
  * @access Private
  * @middleware AuthMiddleware
- * Note: Since we are not storing refresh tokens in the database, we cannot invalidate them.
- * In a real application, you would store refresh tokens in the database and mark them as revoked on logout.
- * For this example, we will just clear the refresh token cookie on logout.
  */
 authRouter.post("/logout-all", AuthMiddleware, logoutAllController);
 

@@ -1,7 +1,11 @@
 import { findSessionByRefreshTokenHash } from "../dao/session.dao.js";
-import { createUser, getUserById } from "../dao/user.dao.js";
+import { createUser, getUserByEmail, getUserById } from "../dao/user.dao.js";
 import { AppError } from "../utils/error.js";
-import { hashPassword, hashRefreshToken } from "../utils/helper.js";
+import {
+  comparePassword,
+  hashPassword,
+  hashRefreshToken,
+} from "../utils/helper.js";
 import { getAccessToken, getRefreshToken, verifyToken } from "../utils/jwt.js";
 import { createSessionService } from "./session.services.js";
 
@@ -52,6 +56,51 @@ export const createUserService = async ({
       id: newUser.id,
       name: newUser.name,
       email: newUser.email,
+    },
+    accessToken,
+    refreshToken,
+  };
+};
+
+//function to login user
+export const loginService = async (
+  email: string,
+  password: string,
+  userAgent: string,
+  ip?: string,
+) => {
+  if (!email || !password)
+    throw new AppError("Email and password are required", 400);
+  const user = await getUserByEmail(email);
+
+  if (!user) throw new AppError("Invalid email or password", 401);
+
+  const isPasswordValid = await comparePassword(password, user.password);
+
+  if (!isPasswordValid) throw new AppError("Invalid email or password", 401);
+
+  // Generate tokens
+  const refreshToken = getRefreshToken(user.id);
+
+  // Create session
+  const session = await createSessionService({
+    userId: user.id,
+    refreshToken, 
+    userAgent,
+    ip,
+  });
+
+  // Generate access token with session ID and user ID
+  const accessToken = getAccessToken({
+    userId: user.id,
+    sessionId: session.id,
+  });
+
+  return {
+    user: {
+      id: user.id,
+      name: user.name,
+      email: user.email,
     },
     accessToken,
     refreshToken,

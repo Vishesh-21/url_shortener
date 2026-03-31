@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { getUserByEmail, getUserById } from "../dao/user.dao.js";
 import {
   createUserService,
+  loginService,
   refreshTokenService,
 } from "../services/user.services.js";
 import { cookieOptions } from "../utils/helper.js";
@@ -49,6 +50,37 @@ export async function registerController(req: Request, res: Response) {
     res.cookie("refreshToken", data.refreshToken, cookieOptions);
 
     return res.status(201).json({
+      user: data.user,
+      accessToken: data.accessToken,
+    });
+  } catch (error) {
+    return res.status(500).json({ error });
+  }
+}
+
+//function to login user
+export async function loginController(req: Request, res: Response) {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({ error: "Required fields are missing!" });
+    }
+
+    const userAgent = req.get("User-Agent") || "Unknown";
+    const ip = req.ip;
+
+    const data = await loginService(email, password, userAgent, ip);
+
+    if (!data) {
+      return res.status(401).json({ error: "Invalid email or password" });
+    }
+
+    // Set refresh token in cookie
+    res.cookie("refreshToken", data.refreshToken, cookieOptions);
+
+    return res.status(200).json({
+      message: "Login successful",
       user: data.user,
       accessToken: data.accessToken,
     });
