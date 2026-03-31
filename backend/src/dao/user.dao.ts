@@ -1,6 +1,6 @@
 //function user by email
 
-import { User } from "../models/user.modal.js";
+import { User } from "../models/user.model.js";
 import { AppError } from "../utils/error.js";
 
 // function to create a new user

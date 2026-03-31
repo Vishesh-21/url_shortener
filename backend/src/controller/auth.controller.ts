@@ -1,6 +1,13 @@
 import { Request, Response } from "express";
 import { getUserByEmail, getUserById } from "../dao/user.dao.js";
-import { createUserService } from "../services/user.services.js";
+import {
+  createUserService,
+  refreshTokenService,
+} from "../services/user.services.js";
+import { cookieOptions } from "../utils/helper.js";
+import {
+  logoutService,
+} from "../services/session.services.js";
 
 //function to register a new user
 export async function registerController(req: Request, res: Response) {
@@ -20,12 +27,51 @@ export async function registerController(req: Request, res: Response) {
       return res.status(400).json({ error: "User already exists" });
     }
 
-    //register user
-    const newUser = await createUserService(name, email, password);
+    //create session for user and generate tokens
+    const userAgent = req.get("User-Agent") || "Unknown";
+    const ip = req.ip;
 
-    res.status(201).json(newUser);
+    //register user
+    const data = await createUserService({
+      name,
+      email,
+      password,
+      userAgent,
+      ip,
+    });
+
+    if (!data) {
+      return res.status(500).json({ error: "Error creating user" });
+    }
+
+    // Set refresh token in cookie
+    res.cookie("refreshToken", data.refreshToken, cookieOptions);
+
+    return res.status(201).json({
+      user: data.user,
+      accessToken: data.accessToken,
+    });
   } catch (error) {
-    res.status(500).json({ error });
+    return res.status(500).json({ error });
+  }
+}
+
+//refresh token controller
+export async function refreshTokenController(req: Request, res: Response) {
+  try {
+    const refreshToken = req.cookies.refreshToken;
+
+    if (!refreshToken) {
+      return res.status(401).json({ error: "Unauthorized!" });
+    }
+
+
+    const data = await refreshTokenService(refreshToken);
+    // Set new refresh token in cookie
+    res.cookie("refreshToken", data.refreshToken, cookieOptions);
+    return res.status(200).json({ accessToken: data.accessToken });
+  } catch (error) {
+    res.status(500).json({ error: "Invalid Token!" });
   }
 }
 
@@ -34,8 +80,29 @@ export async function getMeController(req: Request, res: Response) {
   try {
     const { userId } = req.user;
     const user = await getUserById(userId);
-    res.status(200).json({ user });
+    return res.status(200).json({ user });
   } catch (error) {
-    res.status(500).json({ error });
+    return res.status(500).json({ error });
+  }
+}
+
+//function to logout user
+export async function logoutController(req: Request, res: Response) {
+  try {
+    const refreshToken = req.cookies.refreshToken;
+    if (!refreshToken) {
+      return res.status(400).json({ error: "Refresh token is required" });
+    }
+
+    const session = await logoutService(refreshToken);
+
+    if (!session) {
+      return res.status(500).json({ error: "Error logging out" });
+    }
+
+    res.clearCookie("refreshToken", cookieOptions);
+    return res.status(200).json({ message: "Logout successful" });
+  } catch (error) {
+    return res.status(500).json({ error });
   }
 }

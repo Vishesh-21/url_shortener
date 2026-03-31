@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import URL from "../models/url.modal.js";
+import URL from "../models/url.model.js";
 import { AppError } from "../utils/error.js";
 
 //save short url to DB
@@ -8,26 +8,35 @@ export const saveShortURl = async (
   long_url: string,
   user_id?: string,
 ) => {
-  const newUrl = new URL({
-    long_url,
-    short_url,
-  });
+  try {
+    const newUrl = new URL({
+      long_url,
+      short_url,
+    });
 
-  if (!newUrl) throw new AppError("Internal Server Error", 500);
+    if (!newUrl) throw new AppError("Internal Server Error", 500);
 
-  if (user_id) {
-    newUrl.user = new mongoose.Types.ObjectId(user_id);
+    if (user_id) {
+      newUrl.user = new mongoose.Types.ObjectId(user_id);
+    }
+
+    newUrl.save();
+    
+  } catch (error) {
+    throw new AppError("Internal Server Error", 500);
   }
-
-  newUrl.save();
 };
 
 export const getURLData = async (short_url: string) => {
-  const data = await URL.findOneAndUpdate(
-    { short_url },
-    { $inc: { clicks: 1 } },
-  ).lean();
+  try {
+    const data = await URL.findOneAndUpdate(
+      { short_url },
+      { $inc: { clicks: 1 } },
+    ).lean();
 
-  if (!data) throw new AppError("URL not found", 404);
-  return data;
+    if (!data) throw new AppError("URL not found", 404);
+    return data;
+  } catch (error) {
+    throw new AppError("Internal Server Error", 500);
+  }
 };

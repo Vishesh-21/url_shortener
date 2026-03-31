@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { verifyToken } from "../utils/helper.js";
+import { verifyToken } from "../utils/jwt.js";
 
 export function AuthMiddleware(
   req: Request,

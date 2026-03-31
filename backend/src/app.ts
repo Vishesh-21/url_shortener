@@ -2,6 +2,7 @@ import express from "express";
 import URLRouter from "./routes/url.routes.js";
 import { globalErrorHandler } from "./middleware/error.middleware.js";
 import authRouter from "./routes/auth.routes.js";
+import cookieParser from "cookie-parser";
 
 //create express app
 const app = express();
@@ -12,6 +13,7 @@ const app = express();
  */
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 //routes
 app.use("/api/auth", authRouter);

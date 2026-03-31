@@ -1,15 +1,15 @@
 import { nanoid } from "nanoid";
 import { AppError } from "./error.js";
 import bcrypt from "bcryptjs";
-import jwt, { SignOptions } from "jsonwebtoken";
-import mongoose from "mongoose";
-import { ENV } from "../config/env.js";
+import crypto from "crypto";
 
-//// Define a proper payload interface
-interface JwtPayload {
-  userId: string | mongoose.Types.ObjectId;
-  email?: string;
-}
+//cookie options
+export const cookieOptions = {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  sameSite: "strict" as const,
+  maxAge: 7 * 24 * 60 * 60 * 1000,
+};
 
 export const generateId = (length = 7) => {
   const id = nanoid(length);
@@ -34,17 +34,17 @@ export const comparePassword = async (
   return isMatch;
 };
 
-//function to generate jwt token
-export const generateToken = (payload: JwtPayload, options?: SignOptions) => {
-  const token = jwt.sign(payload, ENV.JWT_SECRET, {
-    expiresIn: "1h",
-    ...options,
-  });
-  return token;
-};
 
-//function to verify jwt token
-export const verifyToken = (token: string) => {
-  const decoded = jwt.verify(token, ENV.JWT_SECRET) as JwtPayload;
-  return decoded;
+//function to hash refresh token
+export const hashRefreshToken = (refreshToken: string): string => {
+  if (!refreshToken) {
+    throw new Error("Refresh token is required");
+  }
+
+  const hash = crypto
+    .createHash("sha256")
+    .update(refreshToken)
+    .digest("hex");
+
+  return hash;
 };
