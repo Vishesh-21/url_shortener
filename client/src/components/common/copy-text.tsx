@@ -1,5 +1,3 @@
-
-
 import { Copy } from "lucide-react";
 import { Button } from "../ui/button";
 import { toast } from "sonner";
@@ -25,7 +23,7 @@ export const CopyButton = ({ value, className }: CopyButtonProps) => {
       variant="ghost"
       size="icon"
       onClick={handleCopy}
-      className={`shrink-0 hover:bg-white/20 text-white rounded-xl cursor-pointer ${className}`}
+      className={`shrink-0 hover:bg-white/40  text-white rounded-none cursor-pointer ${className}`}
     >
       <Copy className="h-5 w-5" />
     </Button>

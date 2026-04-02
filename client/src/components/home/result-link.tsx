@@ -6,7 +6,7 @@ interface LinkResultProps {
 }
 
 export const LinkResult = ({ url }: LinkResultProps) => (
-  <Card className="bg-white/10 border-white/20 p-8 rounded-[2rem] backdrop-blur-sm">
+  <Card className="bg-white/10 border-white/20 p-8 rounded-none bg-red- backdrop-blur-sm">
     <p className="text-xs font-bold uppercase tracking-widest text-blue-100 mb-4 opacity-70">
       Ready to Share
     </p>

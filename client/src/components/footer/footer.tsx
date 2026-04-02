@@ -2,6 +2,7 @@ import React from "react";
 import { FaGithubAlt, FaLinkedin } from "react-icons/fa";
 import { RiGlobalFill } from "react-icons/ri";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
+import { Link } from "react-router";
 
 interface SocialLink {
   name: string;
@@ -51,8 +52,8 @@ const Footer = () => {
 
         {/* Right side: Social Links */}
         <div className="flex items-center gap-4">
-          {socialLinks.map((link : SocialLink ) => (
-            <FooterIcon key={link.name} {...link}/>
+          {socialLinks.map((link: SocialLink) => (
+            <FooterIcon key={link.name} {...link} />
           ))}
         </div>
       </div>
@@ -61,22 +62,18 @@ const Footer = () => {
 };
 
 // Sub-component for clean, reusable icons
-const FooterIcon = ({
-  name,
-  icon,
-  href,
-}: SocialLink) => (
+const FooterIcon = ({ name, icon, href }: SocialLink) => (
   <Tooltip>
     <TooltipTrigger>
-      <a
-        href={href}
+      <Link
+        to={href}
         target="_blank"
         className="p-2 rounded-xl text-muted-foreground hover:text-foreground  transition-all duration-200"
       >
         {React.createElement(icon, { className: "h-5 w-5" })}
-      </a>
+      </Link>
     </TooltipTrigger>
-    <TooltipContent>{name}</TooltipContent>
+    <TooltipContent className="rounded-none">{name}</TooltipContent>
   </Tooltip>
 );
 

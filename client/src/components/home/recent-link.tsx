@@ -21,7 +21,7 @@ export const RecentLinks = () => {
       {history.map((link, idx) => (
         <div
           key={idx}
-          className="group flex items-center justify-between p-5 rounded-3xl border border-white/20 bg-transparent hover:bg-white/5 transition-colors"
+          className="group flex items-center justify-between p-5 rounded-none border border-white/20 bg-transparent hover:bg-white/5 transition-colors"
         >
           <div className="space-y-1 overflow-hidden">
             <h4 className="font-bold text-lg">{link.short}</h4>
