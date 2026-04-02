@@ -1,11 +1,11 @@
 import { Outlet } from "react-router";
+import { Container } from "../components/container";
 
 const AuthLayout = () => {
   return (
-    <div>
-      <h2>Auth Pages</h2>
+    <Container className="md:py-0">
       <Outlet />
-    </div>
+    </Container>
   );
 };
 
