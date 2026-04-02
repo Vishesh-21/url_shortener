@@ -12,7 +12,7 @@ export function getAccessToken(
   { userId, sessionId }: Prop,
   options?: jwt.SignOptions,
 ) {
-  const token = jwt.sign({ userId, sessionId }, ENV.JWT_SECRET!, {
+  const token = jwt.sign({ userId, sessionId }, ENV.ACCESS_TOKEN_SECRET!, {
     expiresIn: "15m",
     ...options,
   });
@@ -22,7 +22,7 @@ export function getAccessToken(
 
 //function to generate refresh token using jwt
 export function getRefreshToken(userId: string, options?: jwt.SignOptions) {
-  const token = jwt.sign({ userId }, ENV.JWT_SECRET!, {
+  const token = jwt.sign({ userId }, ENV.REFRESH_TOKEN_SECRET!, {
     expiresIn: "7d",
     ...options,
   });
@@ -31,10 +31,20 @@ export function getRefreshToken(userId: string, options?: jwt.SignOptions) {
 }
 
 //function to verify jwt token
-export const verifyToken = (token: string) => {
+export const verifyAccessToken = (token: string) => {
   try {
     if (!token) throw new AppError("Token is required", 401);
-    const decoded = jwt.verify(token, ENV.JWT_SECRET) as Prop;
+    const decoded = jwt.verify(token, ENV.ACCESS_TOKEN_SECRET) as Prop;
+    return decoded;
+  } catch (error) {
+    throw new AppError("Invalid token", 401);
+  }
+};
+
+export const verifyRefreshToken = (token: string) => {
+  try {
+    if (!token) throw new AppError("Token is required", 401);
+    const decoded = jwt.verify(token, ENV.REFRESH_TOKEN_SECRET) as Prop;
     return decoded;
   } catch (error) {
     throw new AppError("Invalid token", 401);

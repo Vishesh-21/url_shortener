@@ -5,7 +5,7 @@ import {
 } from "../dao/session.dao.js";
 import { AppError } from "../utils/error.js";
 import { hashRefreshToken } from "../utils/helper.js";
-import { verifyToken } from "../utils/jwt.js";
+import { verifyRefreshToken } from "../utils/jwt.js";
 
 interface SessionProps {
   userId: string;
@@ -68,7 +68,7 @@ export const logoutAllService = async (refreshToken: string) => {
     if (!refreshToken)
       throw new AppError("Refresh token hash is required", 400);
 
-    const decode = verifyToken(refreshToken);
+    const decode = verifyRefreshToken(refreshToken);
 
     if (!decode || typeof decode === "string")
       throw new AppError("Invalid refresh token", 401);

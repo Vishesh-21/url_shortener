@@ -6,7 +6,7 @@ import {
   hashPassword,
   hashRefreshToken,
 } from "../utils/helper.js";
-import { getAccessToken, getRefreshToken, verifyToken } from "../utils/jwt.js";
+import { getAccessToken, getRefreshToken, verifyRefreshToken } from "../utils/jwt.js";
 import { createSessionService } from "./session.services.js";
 
 interface CreateUserDTO {
@@ -119,7 +119,7 @@ export const getMeService = async (userId: string) => {
 export const refreshTokenService = async (refreshToken: string) => {
   if (!refreshToken) throw new AppError("Refresh token is required", 400);
 
-  const decoded = verifyToken(refreshToken);
+  const decoded = verifyRefreshToken(refreshToken);
 
   if (!decoded || !decoded.userId)
     throw new AppError("Invalid refresh token", 401);

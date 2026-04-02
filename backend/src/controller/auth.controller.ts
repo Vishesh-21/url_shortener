@@ -46,6 +46,10 @@ export async function registerController(req: Request, res: Response) {
       return res.status(500).json({ error: "Error creating user" });
     }
 
+    if (!data.accessToken || !data.refreshToken) {
+      return res.status(500).json({ error: "Error generating tokens" });
+    }
+
     // Set refresh token in cookie
     res.cookie("refreshToken", data.refreshToken, cookieOptions);
 
@@ -72,7 +76,7 @@ export async function loginController(req: Request, res: Response) {
 
     const data = await loginService(email, password, userAgent, ip);
 
-    if (!data) {
+    if (!data || !data.accessToken || !data.refreshToken) {
       return res.status(401).json({ error: "Invalid email or password" });
     }
 

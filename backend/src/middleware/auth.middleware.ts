@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { verifyToken } from "../utils/jwt.js";
+import { verifyAccessToken } from "../utils/jwt.js";
 
 export function AuthMiddleware(
   req: Request,
@@ -14,7 +14,7 @@ export function AuthMiddleware(
     }
 
     // verify token
-    const decoded = verifyToken(token);
+    const decoded = verifyAccessToken(token);
     req.user = decoded;
     next();
   } catch (error) {
