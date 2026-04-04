@@ -1,8 +1,9 @@
 import axios from "axios";
 import { toast } from "sonner";
+import { ENV } from "./env.config";
 
 export const axiosClient = axios.create({
-  baseURL: import.meta.env.VITE_BACKEND_API_URL,
+  baseURL: ENV.BACKEND_API_URL,
   timeout: 5000,
   headers: {
     "Content-Type": "application/json",
@@ -21,10 +22,12 @@ axiosClient.interceptors.response.use(
 
     if (status === 401) {
       console.error("Unauthorized - maybe redirect to login");
+      toast.error("Unauthorized - maybe redirect to login");
     }
 
     if (status === 500) {
       console.error("Server error");
+      toast.error("Server error");
     }
 
     toast.error(message);

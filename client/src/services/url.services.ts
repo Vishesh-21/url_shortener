@@ -1,7 +1,10 @@
 import { axiosClient } from "../config/api.config";
 
 export const shortenUrlApi = async (url: string) => {
-  const res = await axiosClient.post("/shorten", { url });
-  
-  return res.data; 
+  try {
+    const res = await axiosClient.post("/", { url });
+    return res.data;
+  } catch (error: any) {
+    throw new Error(error?.response?.data?.message || "Failed to shorten URL");
+  }
 };
