@@ -4,6 +4,8 @@ import AuthFooter from "../components/auth/auth-footer";
 import AuthHeader from "../components/auth/auth-header";
 import AuthInput from "../components/auth/auth-input";
 import { Button } from "../components/ui/button";
+import { useNavigate } from "react-router";
+import { useSignUp } from "../hooks/useSignUp";
 
 export default function SignUpPage() {
   const [formData, setFormData] = useState({
@@ -11,6 +13,9 @@ export default function SignUpPage() {
     email: "",
     password: "",
   });
+
+  const { signup, loading, error } = useSignUp();
+  const navigate = useNavigate();
 
   // handle input change
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -21,16 +26,20 @@ export default function SignUpPage() {
   };
 
   // handle form submit
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // handle sign up logic here
-    console.log(formData);
-    // reset form
-    setFormData({
-      name: "",
-      email: "",
-      password: "",
-    });
+    try {
+      await signup(formData);
+
+      //reset form
+      setFormData({
+        name: "",
+        email: "",
+        password: "",
+      });
+
+      navigate("/sign-in");
+    } catch (error) {}
   };
 
   return (
@@ -64,8 +73,13 @@ export default function SignUpPage() {
           onChange={handleChange}
         />
 
-        <Button className="w-full h-12 text-lg rounded-none cursor-pointer">
-          Sign Up
+        {error && <p className="text-red-500 text-sm">{error}</p>}
+
+        <Button
+          disabled={loading}
+          className="w-full h-12 text-lg rounded-none cursor-pointer"
+        >
+          {loading ? "Creating account..." : "Sign Up"}
         </Button>
       </form>
 

@@ -1,10 +1,9 @@
 import { useState } from "react";
 import { shortenUrlApi } from "../services/url.services";
-import { toast } from "sonner";
 
 export const useShortenURL = () => {
   const [url, setUrl] = useState("");
-  const [shortenedUrl, setShortenedUrl] = useState("hello world");
+  const [shortenedUrl, setShortenedUrl] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -20,7 +19,6 @@ export const useShortenURL = () => {
       setError("");
       const data = await shortenUrlApi(url);
       setShortenedUrl(data.shortLink);
-      toast.success("URL shortened successfully!");
       setUrl("");
     } catch (err) {
       setError("Something went wrong");

@@ -1,5 +1,4 @@
 import axios from "axios";
-import { toast } from "sonner";
 import { ENV } from "./env.config";
 
 export const axiosClient = axios.create({
@@ -21,16 +20,15 @@ axiosClient.interceptors.response.use(
     const status = error?.response?.status || 500;
 
     if (status === 401) {
-      console.error("Unauthorized - maybe redirect to login");
-      toast.error("Unauthorized - maybe redirect to login");
+      return Promise.reject({
+        message: "Unauthorized. Please login again.",
+        status,
+      });
     }
 
     if (status === 500) {
       console.error("Server error");
-      toast.error("Server error");
     }
-
-    toast.error(message);
 
     return Promise.reject({
       message,
