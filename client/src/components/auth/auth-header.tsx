@@ -15,7 +15,7 @@ const AuthHeader = ({ title, subtitle }: Props) => {
       >
         <Link2 className="w-6 h-6" />
       </Link>
-      <h1 className="text-3xl font-bold tracking-tight text-foreground text-center">
+      <h1 className="text-3xl font-bold tracking-tight text-gradient text-center">
         {title}
       </h1>
       {subtitle && (

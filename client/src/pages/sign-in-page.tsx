@@ -4,6 +4,8 @@ import AuthFooter from "../components/auth/auth-footer";
 import AuthHeader from "../components/auth/auth-header";
 import AuthInput from "../components/auth/auth-input";
 import { Button } from "../components/ui/button";
+import { useLogin } from "../hooks/useLogin";
+import { useNavigate } from "react-router";
 
 export default function SignInPage() {
   const [formData, setFormData] = useState({
@@ -18,15 +20,26 @@ export default function SignInPage() {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const { login, loading, error } = useLogin();
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // handle sign in logic here
-    console.log(formData);
-    // reset form
-    setFormData({
-      email: "",
-      password: "",
-    });
+    try {
+      await login(formData);
+
+      //reset form
+      setFormData({
+        email: "",
+        password: "",
+      });
+
+      //navigate to dashboard
+      navigate("/");
+    } catch (err) {
+      // Error is already handled in the useLogin hook, so no need to do anything here
+      console.log("Login failed:", err);
+    }
   };
 
   return (
@@ -55,8 +68,13 @@ export default function SignInPage() {
           onChange={handleChange}
         />
 
-        <Button className="w-full h-12 rounded-none text-lg cursor-pointer">
-          Login
+        {error && <p className="text-sm text-red-500">{error}</p>}
+
+        <Button
+          disabled={loading}
+          className="w-full h-12 rounded-none text-lg cursor-pointer"
+        >
+          {loading ? "Logging in..." : "Login"}
         </Button>
       </form>
 
