@@ -4,8 +4,10 @@ import HomePageComponent from "../components/home/home-component"
 
 export const HomePage = () => {
   return (
-    <Container>
+   <div className="mx-auto max-w-3xl border-l border-r shadow-2xl shadow-primary-foreground">
+     <Container>
         <HomePageComponent/>
     </Container>
+   </div>
   )
 }
