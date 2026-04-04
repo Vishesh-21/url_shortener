@@ -32,7 +32,7 @@ const AuthInput = ({
         placeholder={placeholder}
         value={value}
         onChange={onChange}
-        className="h-12 bg-transparent border-zinc-800 focus-visible:ring-primary/20 rounded-none"
+        className="h-12 bg-transparent border-zinc-800 focus-visible:outline-none focus-visible:ring-0 rounded-none"
       />
     </div>
   );

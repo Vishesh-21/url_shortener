@@ -6,7 +6,9 @@ const App = () => {
   return (
     <BrowserRouter>
       {/* app routes  */}
-      <AppRoutes />
+      <div className="relative">
+        <AppRoutes />
+      </div>
 
       {/* sonner component  */}
       <Toaster position="top-right" />

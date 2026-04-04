@@ -1,5 +1,4 @@
-import { Link2 } from "lucide-react";
-import { Link } from "react-router";
+import { Logo } from "../common/logo";
 
 interface Props {
   title: string;
@@ -9,12 +8,9 @@ interface Props {
 const AuthHeader = ({ title, subtitle }: Props) => {
   return (
     <div className="flex flex-col items-center mb-8">
-      <Link
-        to="/"
-        className="flex items-center justify-center hover:scale-105 transition-all w-12 h-12 mb-4 rounded-full bg-primary/10 text-primary"
-      >
-        <Link2 className="w-6 h-6" />
-      </Link>
+      {/* logo  */}
+      <Logo />
+
       <h1 className="text-3xl font-bold tracking-tight text-gradient text-center">
         {title}
       </h1>

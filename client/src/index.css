@@ -133,4 +133,8 @@
   .text-gradient {
     @apply bg-linear-to-b tracking-tight from-foreground/10 via-primary to-muted-foreground/50 bg-clip-text text-transparent;
   }
+
+  .icon-gradient {
+    @apply bg-linear-to-t from-muted-foreground/20 via-background to-muted-foreground/30 border border-muted-foreground/10 hover:scale-105 transition-all;
+  }
 }

@@ -27,14 +27,14 @@ export const UrlInput = ({
       <Input
         type="text"
         placeholder={placeHolder}
-        className="h-16 pl-6 pr-32 bg-white/20 border-white/30 rounded-none text-white placeholder:text-blue-100 text-lg"
+        className="h-16 pl-6 pr-32 bg-white/20 rounded-full text-white placeholder:text-blue-100 focus-visible:ring-0  text-lg"
         value={url}
         onChange={(e) => setUrl(e.target.value)}
       />
       <Button
         onClick={onShorten}
         variant={'ghost'}
-        className="absolute right-2 top-2 h-12 px-4 rounded-none font-bold cursor-pointer"
+        className="absolute right-2 top-2 h-12 px-4 rounded-full font-bold cursor-pointer"
         disabled={loading}
       >
         {loading ? (
