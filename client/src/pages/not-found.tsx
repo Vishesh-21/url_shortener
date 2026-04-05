@@ -32,9 +32,7 @@ export const NotFoundPage = () => {
       </div>
 
       <div className="flex flex-col items-center text-center max-w-md w-full">
-        <h1 className="text-8xl font-extrabold text-gradient">
-          404
-        </h1>
+        <h1 className="text-8xl font-extrabold text-gradient">404</h1>
 
         <h2 className="mt-4 text-2xl font-semibold text-foreground text-gradient">
           Page not found
@@ -80,7 +78,7 @@ export const IconButton = ({
   className = "",
 }: IconButtonProps) => {
   const baseStyle =
-    "flex items-center justify-center h-12 w-12 rounded-full bg-white/5 hover:bg-white/10 transition-all";
+    "flex items-center justify-center h-12 w-12 rounded-full icon-gradient";
 
   return (
     <Tooltip>
