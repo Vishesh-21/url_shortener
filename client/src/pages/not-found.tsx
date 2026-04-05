@@ -74,7 +74,6 @@ export const IconButton = ({
   tooltip,
   onClick,
   href,
-  asChild = false,
   className = "",
 }: IconButtonProps) => {
   const baseStyle =
